@@ -154,16 +154,16 @@ void MainWindow::on_rcvHexCheckBox_toggled(bool checked)
 void MainWindow::on_rcvSaveButton_clicked()
 {
     QString filename = ui->rcvFileNameLineEdit->text();
-    QFileInfo info(filename);
-    if (!info.isFile()) {
-        filename = QFileDialog::getSaveFileName(this, "文件另存为", "", tr("Recved Data (*.txt)"));
-        ui->rcvFileNameLineEdit->setText(filename);
-    }
-
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(this, tr("Critical Error"), "无法打开：[" + filename + "]");
-        return;
+        filename = QFileDialog::getSaveFileName(this, "文件另存为", "", tr("Recved Data (*.txt)"));
+        ui->rcvFileNameLineEdit->setText(filename);
+
+        file.setFileName(filename);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::critical(this, tr("Critical Error"), "无法打开：[" + filename + "]");
+            return;
+        }
     }
 
     file.write(ui->rcvTextEdit->toPlainText().toStdString().c_str());
@@ -186,9 +186,9 @@ void MainWindow::on_sndSendButton_clicked()
  */
 void MainWindow::on_rcvFileSelectButton_clicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "选择存储文件", "", tr("Recved Data (*.txt)"));
+    QString filename = QFileDialog::getSaveFileName(this, "选择存储文件", "", tr("Recved Data (*.txt)"));
     QFileInfo info(filename);
-    if (!info.isFile()) {
+    if (info.isDir()) {
         QMessageBox::critical(this, tr("Critical Error"), "非法文件：[" + filename + "]");
         filename.clear();
     }
@@ -201,18 +201,18 @@ void MainWindow::on_rcvToFileCheckBox_toggled(bool checked)
 {
     if (checked) {
         QString filename = ui->rcvFileNameLineEdit->text();
-        QFileInfo info(filename);
-        if (!info.isFile()) {
-            filename = QFileDialog::getSaveFileName(this, "文件另存为", "", tr("Recved Data (*.txt)"));
-            ui->rcvFileNameLineEdit->setText(filename);
-        }
-
         mRcvFile = new QFile(filename);
         if (!mRcvFile->open(QIODevice::WriteOnly)) {
-            QMessageBox::critical(this, tr("Critical Error"), "无法打开：[" + filename + "]");
-            delete mRcvFile;
-            mRcvFile = NULL;
-            return;
+            filename = QFileDialog::getSaveFileName(this, "文件另存为", "", tr("Recved Data (*.txt)"));
+            ui->rcvFileNameLineEdit->setText(filename);
+
+            mRcvFile->setFileName(filename);
+            if (!mRcvFile->open(QIODevice::WriteOnly)) {
+                QMessageBox::critical(this, tr("Critical Error"), "无法打开：[" + filename + "]");
+                delete mRcvFile;
+                mRcvFile = NULL;
+                return;
+            }
         }
 
         ui->rcvFileNameLineEdit->setEnabled(false);
