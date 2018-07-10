@@ -5,6 +5,7 @@
 #include <QSerialPort>
 #include <QDockWidget>
 #include <QTextEdit>
+#include <QFileDialog>
 
 namespace Ui {
 class MainWindow;
@@ -45,10 +46,15 @@ private slots:
 
     void on_sndSendButton_clicked();
 
+    void on_rcvFileSelectButton_clicked();
+
+    void on_rcvToFileCheckBox_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
 
     QSerialPort *mComPort;
+    QFile *mRcvFile;
 
     QByteArray mRxDatas;
     bool isPortOpen;

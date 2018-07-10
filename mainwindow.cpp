@@ -1,13 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
-#include <QFileDialog>
 #include <QSerialPortInfo>
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
+    mRcvFile(NULL),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -52,6 +52,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    if (NULL != mRcvFile) {
+        if (mRcvFile->isOpen())
+            mRcvFile->close();
+        delete mRcvFile;
+    }
     delete ui;
 }
 
@@ -113,18 +118,25 @@ void MainWindow::on_openButton_clicked()
 
 void MainWindow::readData() {
     mRxDatas = mComPort->readAll();
+    QString ret;
+
+    QTextCursor cursor = ui->rcvTextEdit->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    ui->rcvTextEdit->setTextCursor(cursor);
 
     if (Qt::CheckState::Checked == ui->rcvHexCheckBox->checkState()) {
-        QString ret(mRxDatas.toHex().toUpper());
+        ret = mRxDatas.toHex().toUpper();
         int len = ret.length()/2 + 1;
         for(int i=1;i<len;i++)
             ret.insert(2*i+i-1," ");
-        ui->rcvTextEdit->textCursor().insertText(ret);
     } else {
-        ui->rcvTextEdit->textCursor().insertText(QString(mRxDatas));
-        QTextCursor cursor = ui->rcvTextEdit->textCursor();
-        cursor.movePosition(QTextCursor::End);
-        ui->rcvTextEdit->setTextCursor(cursor);
+        ret = QString(mRxDatas);
+    }
+
+    if (NULL != mRcvFile && mRcvFile->isOpen()) {
+        mRcvFile->write(ret.toStdString().c_str());
+    } else {
+        ui->rcvTextEdit->textCursor().insertText(ret);
     }
 }
 
@@ -141,7 +153,13 @@ void MainWindow::on_rcvHexCheckBox_toggled(bool checked)
 
 void MainWindow::on_rcvSaveButton_clicked()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "文件另存为", "", tr("Recved Data (*.txt)"));
+    QString filename = ui->rcvFileNameLineEdit->text();
+    QFileInfo info(filename);
+    if (!info.isFile()) {
+        filename = QFileDialog::getSaveFileName(this, "文件另存为", "", tr("Recved Data (*.txt)"));
+        ui->rcvFileNameLineEdit->setText(filename);
+    }
+
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(this, tr("Critical Error"), "无法打开：[" + filename + "]");
@@ -152,7 +170,6 @@ void MainWindow::on_rcvSaveButton_clicked()
     file.close();
 
     QMessageBox::information(this, tr("保存成功"), "成功写入文件[" + filename + "]");
-    ui->rcvTextEdit->append(filename);
 }
 
 void MainWindow::on_sndSendButton_clicked()
@@ -164,3 +181,57 @@ void MainWindow::on_sndSendButton_clicked()
         str = str + "\n";
     mComPort->write(str.toStdString().c_str());
 }
+/*
+ * on_rcvFileSelectButton_clicked - 选择接收文件
+ */
+void MainWindow::on_rcvFileSelectButton_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(this, "选择存储文件", "", tr("Recved Data (*.txt)"));
+    QFileInfo info(filename);
+    if (!info.isFile()) {
+        QMessageBox::critical(this, tr("Critical Error"), "非法文件：[" + filename + "]");
+        filename.clear();
+    }
+    ui->rcvFileNameLineEdit->setText(filename);
+}
+/*
+ * on_rcvToFileCheckBox_toggled - 是否输出到文件
+ */
+void MainWindow::on_rcvToFileCheckBox_toggled(bool checked)
+{
+    if (checked) {
+        QString filename = ui->rcvFileNameLineEdit->text();
+        QFileInfo info(filename);
+        if (!info.isFile()) {
+            filename = QFileDialog::getSaveFileName(this, "文件另存为", "", tr("Recved Data (*.txt)"));
+            ui->rcvFileNameLineEdit->setText(filename);
+        }
+
+        mRcvFile = new QFile(filename);
+        if (!mRcvFile->open(QIODevice::WriteOnly)) {
+            QMessageBox::critical(this, tr("Critical Error"), "无法打开：[" + filename + "]");
+            delete mRcvFile;
+            mRcvFile = NULL;
+            return;
+        }
+
+        ui->rcvFileNameLineEdit->setEnabled(false);
+        ui->rcvFileSelectButton->setEnabled(false);
+        ui->rcvSaveButton->setEnabled(false);
+        ui->rcvTextEdit->setText(QString("输出数据到文件[") + filename + QString("]"));
+    } else {
+        if (NULL != mRcvFile) {
+            if (mRcvFile->isOpen())
+                mRcvFile->close();
+            delete mRcvFile;
+            mRcvFile = NULL;
+        }
+        ui->rcvFileNameLineEdit->setEnabled(true);
+        ui->rcvFileSelectButton->setEnabled(true);
+        ui->rcvSaveButton->setEnabled(true);
+        ui->rcvTextEdit->clear();
+    }
+}
+
+
+
