@@ -122,6 +122,9 @@ void MainWindow::readData() {
         ui->rcvTextEdit->textCursor().insertText(ret);
     } else {
         ui->rcvTextEdit->textCursor().insertText(QString(mRxDatas));
+        QTextCursor cursor = ui->rcvTextEdit->textCursor();
+        cursor.movePosition(QTextCursor::End);
+        ui->rcvTextEdit->setTextCursor(cursor);
     }
 }
 
