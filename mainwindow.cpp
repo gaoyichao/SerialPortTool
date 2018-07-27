@@ -57,6 +57,12 @@ MainWindow::~MainWindow()
             mRcvFile->close();
         delete mRcvFile;
     }
+
+    if (NULL != mTimer) {
+        delete mTimer;
+        mTimer = NULL;
+    }
+
     delete ui;
 }
 
@@ -234,4 +240,27 @@ void MainWindow::on_rcvToFileCheckBox_toggled(bool checked)
 }
 
 
+void MainWindow::on_sndNewLineCheckBox_2_clicked(bool checked)
+{
+    if (checked) {
+        if (NULL != mTimer) {
+            delete mTimer;
+            mTimer = NULL;
+        }
 
+        int ms = ui->mTimeLineEdit->text().toInt();
+        mTimer = new QTimer();
+        mTimer->start(ms);
+        connect(mTimer, SIGNAL(timeout()), this, SLOT(on_Timer_overflow()));
+    } else {
+        if (NULL != mTimer) {
+            delete mTimer;
+            mTimer = NULL;
+        }
+    }
+}
+
+void MainWindow::on_Timer_overflow()
+{
+    on_sndSendButton_clicked();
+}

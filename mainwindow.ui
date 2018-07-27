@@ -145,7 +145,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -268,6 +268,42 @@
      </property>
      <property name="text">
       <string>\n</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="mTimeLineEdit">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>39</y>
+       <width>113</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>40</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ms</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="sndNewLineCheckBox_2">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>40</y>
+       <width>111</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>自动发送</string>
      </property>
     </widget>
    </widget>

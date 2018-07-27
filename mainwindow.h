@@ -6,6 +6,7 @@
 #include <QDockWidget>
 #include <QTextEdit>
 #include <QFileDialog>
+#include <QTimer>
 
 namespace Ui {
 class MainWindow;
@@ -50,11 +51,16 @@ private slots:
 
     void on_rcvToFileCheckBox_toggled(bool checked);
 
+    void on_sndNewLineCheckBox_2_clicked(bool checked);
+
+    void on_Timer_overflow();
+
 private:
     Ui::MainWindow *ui;
 
     QSerialPort *mComPort;
     QFile *mRcvFile;
+    QTimer *mTimer = NULL;
 
     QByteArray mRxDatas;
     bool isPortOpen;
