@@ -121,10 +121,14 @@ void MainWindow::on_openButton_clicked()
         CloseSerialPort();
     }
 }
+#include <QDateTime>
 
 void MainWindow::readData() {
     mRxDatas = mComPort->readAll();
     QString ret;
+
+    QDateTime current_date_time =QDateTime::currentDateTime();
+    QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz:");
 
     QTextCursor cursor = ui->rcvTextEdit->textCursor();
     cursor.movePosition(QTextCursor::End);
@@ -138,6 +142,9 @@ void MainWindow::readData() {
     } else {
         ret = QString(mRxDatas);
     }
+
+    if (Qt::CheckState::Checked == ui->rcvSysTimeCheckBox->checkState())
+        ret = current_date + ret;
 
     if (NULL != mRcvFile && mRcvFile->isOpen()) {
         mRcvFile->write(ret.toStdString().c_str());

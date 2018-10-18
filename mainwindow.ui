@@ -307,6 +307,19 @@
      </property>
     </widget>
    </widget>
+   <widget class="QCheckBox" name="rcvSysTimeCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>70</y>
+      <width>109</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>系统时间</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
