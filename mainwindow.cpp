@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, CheckCustomBaudRatePolicy);
     //
     isPortOpen = false;
+    //
+    ui->hexProgramButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +58,12 @@ MainWindow::~MainWindow()
         if (mRcvFile->isOpen())
             mRcvFile->close();
         delete mRcvFile;
+    }
+
+    if (NULL != mHexFile) {
+        if (mHexFile->isOpen())
+            mHexFile->close();
+        delete mHexFile;
     }
 
     if (NULL != mTimer) {
@@ -85,6 +93,11 @@ void MainWindow::OpenSerialPort()
     }
     isPortOpen = true;
     ui->openButton->setText("关闭串口");
+    //
+    if (NULL != mHexFile && mHexFile->isOpen())
+        ui->hexProgramButton->setEnabled(true);
+    else
+        ui->hexProgramButton->setEnabled(false);
 }
 void MainWindow::CloseSerialPort()
 {
@@ -92,6 +105,8 @@ void MainWindow::CloseSerialPort()
         mComPort->close();
     isPortOpen = false;
     ui->openButton->setText("打开串口");
+
+    ui->hexProgramButton->setEnabled(false);
 }
 
 void MainWindow::CheckCustomBaudRatePolicy(int idx) {
@@ -123,8 +138,7 @@ void MainWindow::on_openButton_clicked()
 }
 #include <QDateTime>
 
-void MainWindow::readData() {
-    mRxDatas = mComPort->readAll();
+void MainWindow::rcvModeRcvData() {
     QString ret;
 
     QDateTime current_date_time =QDateTime::currentDateTime();
@@ -150,6 +164,35 @@ void MainWindow::readData() {
         mRcvFile->write(ret.toStdString().c_str());
     } else {
         ui->rcvTextEdit->textCursor().insertText(ret);
+    }
+}
+
+void MainWindow::hexModeRcvData() {
+    QByteArray array;
+    ui->rcvTextEdit->textCursor().insertText(mRxDatas);
+
+    switch (mRxDatas[0]) {
+    case 'Y':
+        array = mHexFile->readLine();
+        mComPort->write(array);
+        break;
+    case 'N':
+        mComPort->write(array);
+        break;
+    case 'Z':
+        mMode = rcvMode;
+        break;
+    }
+}
+
+void MainWindow::readData() {
+    mRxDatas = mComPort->readAll();
+
+    switch (mMode) {
+    case rcvMode:
+        return rcvModeRcvData();
+    case hexMode:
+        return hexModeRcvData();
     }
 }
 
@@ -270,4 +313,39 @@ void MainWindow::on_sndNewLineCheckBox_2_clicked(bool checked)
 void MainWindow::on_Timer_overflow()
 {
     on_sndSendButton_clicked();
+}
+
+void MainWindow::on_hexFileSelectButton_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(this, "选择HEX文件", "", tr("HEX文件 (*.hex)"));
+    QFileInfo info(filename);
+    if (info.isDir()) {
+        QMessageBox::critical(this, tr("Critical Error"), "非法文件：[" + filename + "]");
+        filename.clear();
+    }
+    ui->hexFileNameLineEdit->setText(filename);
+
+    mHexFile = new QFile(filename);
+    if (!mHexFile->open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, tr("Critical Error"), "无法打开：[" + filename + "]");
+        delete mHexFile;
+        mHexFile = NULL;
+        ui->hexProgramButton->setEnabled(false);
+        return;
+    }
+
+    if (isPortOpen)
+        ui->hexProgramButton->setEnabled(true);
+    else
+        ui->hexProgramButton->setEnabled(false);
+}
+
+void MainWindow::on_hexProgramButton_clicked()
+{
+    QByteArray array;
+    array.append('B');
+
+    mComPort->write(array);
+
+    mMode = hexMode;
 }

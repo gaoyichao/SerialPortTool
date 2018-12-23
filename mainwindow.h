@@ -20,6 +20,11 @@ enum ComStatus {
     expectCheck
 };
 
+enum ToolMode {
+    rcvMode,
+    hexMode
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -55,15 +60,24 @@ private slots:
 
     void on_Timer_overflow();
 
+    void on_hexFileSelectButton_clicked();
+    void on_hexProgramButton_clicked();
+
+private:
+    void rcvModeRcvData();
+    void hexModeRcvData();
 private:
     Ui::MainWindow *ui;
 
     QSerialPort *mComPort;
     QFile *mRcvFile;
+    QFile *mHexFile;
     QTimer *mTimer = NULL;
 
     QByteArray mRxDatas;
     bool isPortOpen;
+
+    enum ToolMode mMode = rcvMode;
 };
 
 #endif // MAINWINDOW_H

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1044</width>
-    <height>820</height>
+    <width>1069</width>
+    <height>847</height>
    </rect>
   </property>
   <property name="font">
@@ -109,18 +109,226 @@
       <string/>
      </property>
     </widget>
+    <zorder>openButton</zorder>
+    <zorder>baudRateBox</zorder>
+    <zorder>label_5</zorder>
+    <zorder>label_6</zorder>
+    <zorder>serialPortInfoListBox</zorder>
+    <zorder>mStateLabel</zorder>
+    <zorder>tabWidget</zorder>
    </widget>
-   <widget class="QGroupBox" name="groupBox_2">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>170</y>
-      <width>1021</width>
-      <height>301</height>
+      <width>1051</width>
+      <height>671</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>收发</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>450</y>
+        <width>1021</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>发送区</string>
+      </property>
+      <widget class="QCheckBox" name="sndHexCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>850</x>
+         <y>40</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>十六进制发送</string>
+       </property>
+      </widget>
+      <widget class="QTextEdit" name="sndTextEdit">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>991</width>
+         <height>91</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="sndSendButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>发送</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="sndCRCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>40</y>
+         <width>41</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>\r</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="sndNewLineCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>40</y>
+         <width>41</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>\n</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="mTimeLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>39</y>
+         <width>113</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>40</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ms</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="sndNewLineCheckBox_2">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>40</y>
+         <width>111</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>自动发送</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QTextEdit" name="rcvTextEdit">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>1021</width>
+        <height>391</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>8</x>
+        <y>10</y>
+        <width>1021</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="rcvCleanButton">
+         <property name="text">
+          <string>清空</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="rcvSysTimeCheckBox">
+         <property name="text">
+          <string>系统时间</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="rcvFileNameLineEdit"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="rcvFileSelectButton">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="rcvSaveButton">
+         <property name="text">
+          <string>保存</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="rcvToFileCheckBox">
+         <property name="text">
+          <string>输出到文件</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="rcvHexCheckBox">
+         <property name="text">
+          <string>十六进制</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>...</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>20</y>
+      <width>381</width>
+      <height>111</height>
      </rect>
     </property>
     <property name="title">
-     <string>接收区</string>
+     <string>HEX烧录</string>
     </property>
     <widget class="QLabel" name="mStateLabel_2">
      <property name="geometry">
@@ -135,190 +343,49 @@
       <string/>
      </property>
     </widget>
-    <widget class="QTextEdit" name="rcvTextEdit">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>991</width>
-       <height>211</height>
+       <x>0</x>
+       <y>30</y>
+       <width>375</width>
+       <height>69</height>
       </rect>
      </property>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>991</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QPushButton" name="rcvCleanButton">
-        <property name="text">
-         <string>清空</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_8">
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>HEX文件:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="hexFileNameLineEdit"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="hexFileSelectButton">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QLineEdit" name="rcvFileNameLineEdit"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="rcvFileSelectButton">
+       <widget class="QPushButton" name="hexProgramButton">
         <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="rcvSaveButton">
-        <property name="text">
-         <string>保存</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="rcvToFileCheckBox">
-        <property name="text">
-         <string>输出到文件</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="rcvHexCheckBox">
-        <property name="text">
-         <string>十六进制</string>
+         <string>烧写</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>480</y>
-      <width>1021</width>
-      <height>301</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>发送区</string>
-    </property>
-    <widget class="QCheckBox" name="sndHexCheckBox">
-     <property name="geometry">
-      <rect>
-       <x>850</x>
-       <y>40</y>
-       <width>151</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>十六进制发送</string>
-     </property>
-    </widget>
-    <widget class="QTextEdit" name="sndTextEdit">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>991</width>
-       <height>211</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="sndSendButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>发送</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="sndCRCheckBox">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>40</y>
-       <width>41</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>\r</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="sndNewLineCheckBox">
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>40</y>
-       <width>41</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>\n</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="mTimeLineEdit">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>39</y>
-       <width>113</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>40</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>ms</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="sndNewLineCheckBox_2">
-     <property name="geometry">
-      <rect>
-       <x>390</x>
-       <y>40</y>
-       <width>111</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>自动发送</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QCheckBox" name="rcvSysTimeCheckBox">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>70</y>
-      <width>109</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>系统时间</string>
-    </property>
    </widget>
   </widget>
  </widget>
